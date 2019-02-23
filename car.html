@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <!------ Include the above in your HEAD tag ---------->
+
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/main.js"></script>
+</head>
+
+<body class="text-center">
+
+    <form class=" form-signin" id="userForm">
+        <h1 class="h3 mb-3 font-weight-normal">Add Vehicle Details</h1>
+        <label for="inputname" class="sr-only">Vehicle name</label>
+        <input type="text" name="carname" id="inputname" class="form-control" placeholder="Vehicle Name" required autofocus>
+        <label for="inputseat" class="sr-only">Seats</label>
+        <input type="number" name="seat" max=10 id="inputnumber" class="form-control" placeholder="Enter Seats" required>
+        <label for="inputcarnumber" class="sr-only">Vehicle Number</label>
+        <input type="text" name="vehiclenumber" id="inputvehiclenumber" class="form-control" placeholder="Vehicle Number" required>
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Add Vehicle</button>
+        <a href="user.html" class="btn btn-lg btn-secondary btn-block" id="skip">Skip</a>
+    </form>
+    </div>
+</body>
+<script>
+    $('#userForm').submit(function (event) {
+        event.preventDefault();
+        var $form = $(this),
+            carname = $form.find("input[name='carname']").val(),
+            vnumber = $form.find("input[name='vehiclenumber']").val(),
+            seats = $form.find("input[name='seat']").val()
+        console.log(name, vnumber, seats)
+
+        postURL = 'http://10.21.75.221:8000/login/addcar/'
+        var addedby = getCookie('id');
+
+        var data = '{"carname": "' + carname + '","carseats":' + seats + ',"addedBy":' + addedby + ',"carNumber":"' + vnumber + '"}';
+        console.log(data)
+        $.ajax({
+            type: "POST",
+            url: postURL,
+            dataType: "text",
+            // responseType: "json",
+            data: data,
+            // headers: {
+            //     "A // login = JSON.parse(response)
+            // // console.log(login.msg)
+            // if (login.msg === 'successfuly login') {
+            //     window.location.href = "user.html"
+            // } else {
+            //     alert(login.msg)
+            // }ccess-Control-Allow-Origin": "*"
+            // },
+            success: function (response) {
+                //if request if made successfully then the response represent the data
+                // alert('success')
+                res = JSON.parse(response)
+                // // console.log(login.msg)
+                if (res.message === 'Success') {
+                    window.location.href = "user.html"
+                } else {
+                    alert(res.message)
+                }
+
+            }
+
+        });
+    })
+</script>
+
+</html>

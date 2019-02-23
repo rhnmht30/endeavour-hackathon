@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sign up</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <!------ Include the above in your HEAD tag ---------->
+
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/main.js"></script>
+
+</head>
+
+<body onload="checkCookie()">
+    <div class="container">
+        <div class="col-md-6 mx-auto text-center">
+            <div class="header-title">
+                <h1 class="wv-heading--title">
+                    Check out — it’s free!
+                </h1>
+                <h2 class="wv-heading--subtitle">
+                    Lorem ipsum dolor sit amet! Neque porro quisquam est qui do dolor amet, adipisci velit...
+                </h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4 mx-auto">
+                <div class="myform form ">
+                    <form class="form-signin" id="userForm">
+                        <h1 class="h3 mb-3 font-weight-normal">Please Register</h1>
+                        <label for="inputName" class="sr-only">Name</label>
+                        <input type="text" name="name" id="inputName" class="form-control" placeholder="Name" required autofocus>
+                        <label for="inputEmail" class="sr-only">Email address</label>
+                        <input type="email" name="email" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
+                        <label for="inputUsername" class="sr-only">Username</label>
+                        <input type="text" name="username" id="inputUsername" class="form-control" placeholder="Username" required autofocus>
+                        <select name="gender" id="gender" class="custom-select form-control">
+                            <option selected disabled>Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                        <label for="inputPhone" class="sr-only">Phone</label>
+                        <input type="number" name="phone" id="inputPhone" class="form-control" placeholder="Phone" required autofocus>
+                        <label for="inputPassword" class="sr-only">Password</label>
+                        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                        <label for="inputrepassword" class="sr-only">Re-Enter password</label>
+                        <input type="password" name="repassword" id="inputrepassword" class="form-control" placeholder="Re-Enter password" required autofocus>
+
+
+                        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+                        <span>Already have an account? <a href="index.html">Login Here</a></span>
+                        <p class="mt-5 mb-3 text-muted">&copy; 2017-2019</p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    $('#userForm').submit(function (event) {
+        event.preventDefault();
+        var $form = $(this),
+            name = $form.find("input[name='name']").val(),
+            email = $form.find("input[name='email']").val(),
+            username = $form.find("input[name='username']").val(),
+            gender = $form.find("select[name='gender']").val(),
+            phone = $form.find("input[name='phone']").val(),
+            password = $form.find("input[name='password']").val(),
+            repassword = $form.find("input[name='repassword']").val()
+
+
+        // console.log(name, username, password, repassword, gender, phone, email)
+        if (password === repassword) {
+
+            postURL = 'http://10.21.75.221:8000/login/register/'
+
+            var data = '{"username": "' + username + '","password":"' + password + '","name":"' + name + '","email":"' + email + '","mobile":"' + phone + '","gender":"' + gender + '"}';
+            console.log(data)
+            $.ajax({
+                type: "POST",
+                url: postURL,
+                dataType: "text",
+                // responseType: "json",
+                data: data,
+                // headers: {
+                //     "A // login = JSON.parse(response)
+                // // console.log(login.msg)
+                // if (login.msg === 'successfuly login') {
+                //     window.location.href = "user.html"
+                // } else {
+                //     alert(login.msg)
+                // }ccess-Control-Allow-Origin": "*"
+                // },
+                success: function (response) {
+                    //if request if made successfully then the response represent the data
+                    // alert('success')
+                    alert('success')
+                    // login = JSON.parse(response)
+                    // // console.log(login.msg)
+                    // if (login.msg === 'successfuly login') {
+                    //     window.location.href = "user.html"
+                    // } else {
+                    //     alert(login.msg)
+                    // }
+
+                }
+
+            });
+            // window.location.href = "index.html"
+        } else {
+            alert('password does not match')
+        }
+    })
+</script>
+
+</html>
