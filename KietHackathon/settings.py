@@ -25,7 +25,12 @@ SECRET_KEY = 'e*9id682nnu8jzwp70zee_dhki+rk5zvern3i9%wt2ai2s%+f7'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+
+ALLOWED_HOSTS = ['10.42.0.127:3000','127.0.0.1:35933','*']
+
+CORS_ORIGIN_ALLOW_ALL=True
+CORS_ALLOW_METHODS=('GET','POST','OPTIONS','PUT')
+CORS_ALLOW_CREDENTIAL=True
 
 
 # Application definition
@@ -38,9 +43,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -78,8 +85,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        'HOST': '127.0.0.1',
-        'NAME': 'KietHackathon',
+        'HOST': 'localhost',
+        'NAME': 'endeavour',
         'USER': 'root',
         'PASSWORD': '',
         'PORT': '3306',
