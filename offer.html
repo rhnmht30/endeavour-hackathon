@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Offer Page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/main.js"></script>
+</head>
+
+<body>
+    <form class=" form-signin" id="userForm">
+        <h1 class="h3 mb-3 font-weight-normal">Add Pool Offer</h1>
+
+        Select a start time: <input type="time" name="starttime" class="form-control" required autofocus>
+        Select a end time: <input type="time" name="endtime" class="form-control" required autofocus>
+        <select name="cars" id="fill" class="custom-select">
+            <option value="1" class="carnumber" selected disabled>Choose car:</option>
+        </select>
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">START POOL</button>
+        <a href="user.html" class="btn btn-lg btn-secondary btn-block" id="skip">Go back</a>
+    </form>
+
+</body>
+<script>
+    var id = getCookie('id')
+    var lat, log;
+    $.ajax({
+        type: "GET",
+        url: 'http://10.21.75.221:8000/login/profile/?uniq_id=' + Number(id),
+        dataType: 'json',
+
+        success: function (data) {
+            var counter = 0;
+            data.forEach(function (obj) {
+                if (obj['userdata']) {
+                    user = obj['userdata']
+                    // console.log(obj['userdata'])
+                } else {
+                    car = obj['car']
+
+                    // console.log(counter)
+                    var div = '<option value="' + car.carNumber + '" class="carnumber-' + counter + '" ></option>'
+                    $('#fill').append(div);
+                    // console.log(div)
+                    document.querySelector('.carnumber-' + counter).textContent = car.carNumber;
+                    // console.log(obj['car'])
+                    counter = counter + 1;
+                }
+
+            })
+        }
+
+    });
+
+
+
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            // x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+    }
+
+    function showPosition(position) {
+        lat = position.coords.latitude
+        log = position.coords.longitude;
+    }
+
+
+    getLocation();
+    $('#userForm').submit(function (event) {
+        event.preventDefault();
+
+        var $form = $(this),
+            start = $form.find("input[name='starttime']").val(),
+            end = $form.find("input[name='endtime']").val(),
+            carnumber = $form.find("select[name='cars']").val()
+
+        //converting time from 24h to millisecond
+        console.log(start.slice(0, 2), end.slice(0, 2), carnumber, lat, log)
+
+        var data = '{"carNumber": "' + carnumber + '","time_start":"' + start.slice(0, 2) + '","time_end":"' + end.slice(0, 2) + '","latitude":"' + lat + '","longitude":"' + log + '"}';
+
+        $.ajax({
+            type: "POST",
+            url: 'http://10.21.75.221:8000/login/addpool/',
+            dataType: "text",
+            data: data,
+
+            success: function (response) {
+                alert('success')
+
+            }
+
+        });
+
+
+    })
+
+
+    //
+</script>
+
+</html>

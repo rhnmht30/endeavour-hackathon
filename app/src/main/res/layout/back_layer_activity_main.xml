@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="@color/nav_toolbar_color"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <TextView
+        android:id="@+id/nav_home"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Home"
+        android:gravity="center_horizontal"
+        android:textAllCaps="true"
+        android:textSize="16sp"
+        android:textColor="#000"
+        android:layout_marginTop="28dp"
+        />
+    <TextView
+        android:id="@+id/nav_profile"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Profile"
+        android:gravity="center_horizontal"
+        android:textAllCaps="true"
+        android:textSize="16sp"
+        android:textColor="#000"
+        android:layout_marginTop="28dp"
+        />
+
+    <TextView
+        android:id="@+id/nav_add_car"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Car"
+        android:gravity="center_horizontal"
+        android:textAllCaps="true"
+        android:textSize="16sp"
+        android:textColor="#000"
+        android:layout_marginTop="28dp"
+        />
+
+    <TextView
+        android:id="@+id/nav_rewards"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Rewards"
+        android:gravity="center_horizontal"
+        android:textAllCaps="true"
+        android:textSize="16sp"
+        android:textColor="#000"
+        android:layout_marginTop="28dp"
+        />
+
+    <TextView
+        android:id="@+id/nav_sign_out"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sign Out"
+        android:gravity="center_horizontal"
+        android:textAllCaps="true"
+        android:textSize="16sp"
+        android:textColor="#000"
+        android:layout_marginTop="28dp"
+        />
+
+    <View
+        android:id="@+id/nav_view"
+        android:layout_width="80dp"
+        android:layout_height="2dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:background="#000" />
+
+
+</LinearLayout>

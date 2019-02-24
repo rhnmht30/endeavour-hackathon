@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Hackathon</string>
+
+    <!-- for login page -->
+    <string name="text_welcome">Welcome</string>
+    <string name="login_subtitle">Traffic Management</string>
+    <string name="login_text">Log In</string>
+    <string name="text_appeal_signup">Sign up for an account?</string>
+    <string name="edittext_username">Username/E-mail</string>
+    <string name="edittext_password">Password</string>
+
+    <!-- for sign up page -->
+    <string name="signup_text">Sign Up</string>
+    <string name="signup_edittext_name">Name</string>
+    <string name="signup_edittext_age">Age</string>
+    <string name="signup_ediitext_gender">Gender</string>
+    <string name="signup_edittext_email">E-mail</string>
+    <string name="signup_edittext_password">Password</string>
+    <string name="signup_edittext_phoneno">Phone No:</string>
+    <string name="signup_edittext_username">Username</string>
+
+    <!-- for add car -->
+    <string name="add_car_title">Add Car Details: </string>
+    <string name="edittext_addcar_vehicle_name">Vehicle Name</string>
+    <string name="edittext_addcar_vehicle_number">Vehicle Number</string>
+    <string name="edittext_addcar_empty_seat">0</string>
+
+</resources>
