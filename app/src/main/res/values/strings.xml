@@ -8,7 +8,7 @@
     <string name="text_appeal_signup">Sign up for an account?</string>
     <string name="edittext_username">Username/E-mail</string>
     <string name="edittext_password">Password</string>
-    
+
     <!-- for sign up page -->
     <string name="signup_text">Sign Up</string>
     <string name="signup_edittext_name">Name</string>
@@ -18,5 +18,11 @@
     <string name="signup_edittext_password">Password</string>
     <string name="signup_edittext_phoneno">Phone No:</string>
     <string name="signup_edittext_username">Username</string>
-    
+
+    <!-- for add car -->
+    <string name="add_car_title">Add Car Details: </string>
+    <string name="edittext_addcar_vehicle_name">Vehicle Name</string>
+    <string name="edittext_addcar_vehicle_number">Vehicle Number</string>
+    <string name="edittext_addcar_empty_seat">0</string>
+
 </resources>

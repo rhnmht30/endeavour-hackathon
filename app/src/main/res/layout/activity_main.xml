@@ -20,7 +20,7 @@
         android:id="@+id/backdropcontainer"
         app:menuIcon="@drawable/ic_menu"
         app:closeIcon="@drawable/ic_close"
-        app:duration="700">
+        app:duration="500">
 
         <include layout="@layout/back_layer_activity_main"/>
         <include layout="@layout/front_layer_activity_main"/>

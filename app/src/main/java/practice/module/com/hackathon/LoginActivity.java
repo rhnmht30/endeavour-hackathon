@@ -30,10 +30,10 @@ public class LoginActivity extends AppCompatActivity {
     private FloatingActionButton fab_login;
     private TextView signUpAppeal;
     private LoginRequest loginRequest;
-    private EditText username,password;
+    private EditText username, password;
     private LoginResponse loginResponse;
     SharedPreferences.Editor editor;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,9 +41,9 @@ public class LoginActivity extends AppCompatActivity {
 
         context = this.getApplicationContext();
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.login_page);
-        
+
         fab_login = findViewById(R.id.fab_login);
         username = findViewById(R.id.editText_login_email);
         password = findViewById(R.id.editText_login_password);
@@ -56,27 +56,24 @@ public class LoginActivity extends AppCompatActivity {
                 setLogin();
             }
         });
-        
+
         signUpAppeal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent signUpIntent = new Intent(getApplicationContext(),SignupActivity.class);
+                Intent signUpIntent = new Intent(getApplicationContext(), SignupActivity.class);
                 startActivity(signUpIntent);
                 finish();
             }
         });
     }
 
-    public void setLogin(){
+    public void setLogin() {
         loginRequest = new LoginRequest();
         loginRequest.setUsername(username.getText().toString());
         loginRequest.setPassword(password.getText().toString());
-Log.e("Check",new Gson().toJson(loginRequest));
-//        Intent intentMainActivity = new Intent(LoginActivity.this,MainActivity.class);
-//        startActivity(intentMainActivity);
-//        finish();
+        Log.e("Check", new Gson().toJson(loginRequest));
 
-         editor = getSharedPreferences("get", MODE_PRIVATE).edit();
+        editor = getSharedPreferences("get", MODE_PRIVATE).edit();
         Login login = Api.createService(Login.class);
         Call<LoginResponse> call = login.login(loginRequest);
         call.enqueue(new Callback<LoginResponse>() {
@@ -85,18 +82,19 @@ Log.e("Check",new Gson().toJson(loginRequest));
                 Log.e("Reeee", "hello");
                 if (response.code() == 200) {
                     loginResponse = response.body();
-                    editor.putInt("uniq_id",response.body().getUniqId());
+                    editor.putInt("uniq_id", response.body().getUniqId());
                     editor.apply();
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), AddCarActivity.class);
                     startActivity(intent);
 
 
-                }}
+                }
+            }
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
-               t.printStackTrace();
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                t.printStackTrace();
+                Intent intent = new Intent(getApplicationContext(), AddCarActivity.class);
                 editor.apply();
                 startActivity(intent);
             }
