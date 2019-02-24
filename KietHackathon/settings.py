@@ -36,7 +36,7 @@ CORS_ALLOW_CREDENTIAL=True
 # Application definition
 
 INSTALLED_APPS = [
-    'login_signup',
+    'login',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -86,7 +86,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         'HOST': 'localhost',
-        'NAME': 'endeavour',
+        'NAME': 'kiethack',
         'USER': 'root',
         'PASSWORD': '',
         'PORT': '3306',
@@ -118,7 +118,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
