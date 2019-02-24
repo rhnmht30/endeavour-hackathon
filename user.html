@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Bootstrap Example</title>
+    <title>User Page</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -53,9 +53,13 @@
 
     </div>
 
-    <div class="container-fluid text-center">
-        <button class="btn btn-lg btn-primary mybtn" type="submit" id="find">FIND</button>
-        <br> <button class="btn btn-lg btn-success mybtn " type="submit" id="offer">OFFER</button>
+    <div class="container-fluid text-center notpooled">
+        <button class="btn btn-lg  mybtn" type="submit" id="find"><a href="find.html"> FIND</a></button>
+        <br> <button class="btn btn-lg  mybtn " type="submit" id="offer"> <a href="offer.html"> OFFER</a></button>
+    </div>
+    <div class="container-fluid text-center pooled">
+        <button class="btn btn-lg btn-success mybtn" type="submit" id="cpooling">Currently Pooling</button>
+        <br> <button class="btn btn-lg btn-danger mybtn " type="submit" id="endpool"> <a href="user.html" style="text-decoration: none;"> End Pool</a></button>
     </div>
 
 </body>
@@ -67,12 +71,53 @@
         window.location.href = 'index.html'
 
     })
+    var id = getCookie('id');
+
+    //request to get pool status
+    $.ajax({
+        type: "GET",
+        url: 'http://10.21.75.221:8000/login/getcurrentPools/?user_id=' + id,
+        dataType: 'json',
+
+        success: function (response) {
+            console.log(response)
+            if (response.status === "ACTIVE") {
+                console.log('active css')
+                $('.pooled').css('display', 'block')
+                $('.notpooled').css('display', 'none')
+
+            } else {
+                console.log('inactive css')
+                $('.notpooled').css('display', 'block')
+                $('.pooled').css('display', 'none')
+            }
+
+        }
+
+    });
+
+    //end pool
+    $('#endpool').click(function (event) {
+        event.preventDefault();
+        $.ajax({
+            type: "GET",
+            url: 'http://10.21.75.221:8000/login/endpool/?user_id=' + id,
+            dataType: 'json',
+
+            success: function (response) {
+                console.log(response)
+                // if (response.)
+            }
+        });
+    })
+    //
+
 
     $('#profile').click(function () {
         $('button').css('display', 'none');
         $('#fill').css('display', 'block')
 
-        id = getCookie('id');
+
 
         postURL = 'http://10.21.75.221:8000/login/profile/?uniq_id=' + Number(id)
         // console.log(postURL)
@@ -126,14 +171,6 @@
                     }
 
                 })
-                // login = JSON.parse(response)
-                // // console.log(login.msg)
-                // if (login.msg === 'successfuly login') {
-                //     window.location.href = "user.html"
-                // } else {
-                //     alert(login.msg)
-                // }
-
             }
 
         });
