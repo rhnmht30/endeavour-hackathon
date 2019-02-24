@@ -16,14 +16,14 @@
     <script src="js/main.js"></script>
 </head>
 
-<body class="text-center">
+<body class="text-center" onload="checkCookie()">
 
     <form class=" form-signin" id="userForm">
         <h1 class="h3 mb-3 font-weight-normal">Add Vehicle Details</h1>
         <label for="inputname" class="sr-only">Vehicle name</label>
         <input type="text" name="carname" id="inputname" class="form-control" placeholder="Vehicle Name" required autofocus>
         <label for="inputseat" class="sr-only">Seats</label>
-        <input type="number" name="seat" max=10 id="inputnumber" class="form-control" placeholder="Enter Seats" required>
+        <input type="number" name="seat" max=10 id="inputnumber" class="form-control" placeholder="Enter Empty Seats" required>
         <label for="inputcarnumber" class="sr-only">Vehicle Number</label>
         <input type="text" name="vehiclenumber" id="inputvehiclenumber" class="form-control" placeholder="Vehicle Number" required>
 

@@ -23,7 +23,8 @@ function getCookie(cname) {
 
 function checkCookie() {
     var id = getCookie("id");
-    if (id != "") {
+    console.log('checking cookie    ')
+    if (id === "") {
         window.location.href = "index.html"
     } else if (window.location.href === 'http://127.0.0.1:35933/Projects/gridlock/signup.html') {
         console.log('inside sinu')
@@ -33,5 +34,5 @@ function checkCookie() {
 
 
 function deleteCookie() {
-    document.cookie = "username=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }

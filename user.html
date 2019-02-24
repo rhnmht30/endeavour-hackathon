@@ -2,22 +2,143 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="css/style.css">
-    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
-    <!------ Include the above in your HEAD tag ---------->
-
-    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="js/main.js"></script>
+    <style>
+        /* user page */
+
+.mybtn {
+    margin: 10px;
+
+}
+
+    </style>
 </head>
 
-<body>
+<body onload="checkCookie()">
+
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+        <!-- Brand/logo -->
+        <a class="navbar-brand" href="user.html">Home</a>
+
+        <!-- Links -->
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="#" id="profile">Profile</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="car.html" id="addcar">Add car</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#" id="logout">Logout</a>
+            </li>
+        </ul>
+    </nav>
+    <br><br>
+    <div class="container-fluid text-center" id="fill" style="display: none">
+        <h1>PROFILE DETAILS</h1>
+        <h4 class="name"></h4>
+        <h4 class="username"></h4>
+        <h4 class="phone"></h4>
+        <h4 class="gender"></h4>
+        <h4 class="email"></h4>
+        <br>
+        <h1>VEHICLE DETAILS</h1>
+
+    </div>
+
+    <div class="container-fluid text-center">
+        <button class="btn btn-lg btn-primary mybtn" type="submit" id="find">FIND</button>
+        <br> <button class="btn btn-lg btn-success mybtn " type="submit" id="offer">OFFER</button>
+    </div>
 
 </body>
+<script>
+    $('#logout').click(function (event) {
+        event.preventDefault();
+
+        deleteCookie();
+        window.location.href = 'index.html'
+
+    })
+
+    $('#profile').click(function () {
+        $('button').css('display', 'none');
+        $('#fill').css('display', 'block')
+
+        id = getCookie('id');
+
+        postURL = 'http://10.21.75.221:8000/login/profile/?uniq_id=' + Number(id)
+        // console.log(postURL)
+        $.ajax({
+            type: "GET",
+            url: postURL,
+            dataType: 'json',
+            // responseType: "json",
+            // headers: {
+            //     "A // login = JSON.parse(response)
+            // // console.log(login.msg)
+            // if (login.msg === 'successfuly login') {
+            //     window.location.href = "user.html"
+            // } else {
+            //     alert(login.msg)
+            // }ccess-Control-Allow-Origin": "*"
+            // },
+            success: function (data) {
+                //if request if made successfully then the response represent the data
+                // alert('success')
+                // console.log(data)
+                // alert('success')
+                var counter = 0;
+                data.forEach(function (obj) {
+                    if (obj['userdata']) {
+                        user = obj['userdata']
+
+                        document.querySelector('.name').textContent = 'Name: ' + user.name;
+                        document.querySelector('.username').textContent = 'Username: ' + user.username;
+                        document.querySelector('.phone').textContent = 'Phone: ' + user.mobile;
+                        document.querySelector('.gender').textContent = 'Gender: ' + user.gender;
+                        document.querySelector('.email').textContent = 'Email-ID: ' + user.email;
+
+                        // console.log(obj['userdata'])
+                    } else {
+                        car = obj['car']
+
+                        // console.log(counter)
+
+                        var div1 = '<h4 class="carname-' + counter + '"></h4>'
+                        var div2 = '<h4 class="carseats-' + counter + '"></h4>'
+                        var div3 = '<h4 class="carnumber-' + counter + '"></h4><br>'
+                        var div = div1 + div2 + div3;
+                        // console.log(div)
+                        $('#fill').append(div);
+                        document.querySelector('.carname-' + counter).textContent = 'Vehicle Name: ' + car.carname;
+                        document.querySelector('.carseats-' + counter).textContent = 'Seats: ' + car.carseats;
+                        document.querySelector('.carnumber-' + counter).textContent = 'Car Number: ' + car.carNumber;
+                        // console.log(obj['car'])
+                        counter = counter + 1;
+                    }
+
+                })
+                // login = JSON.parse(response)
+                // // console.log(login.msg)
+                // if (login.msg === 'successfuly login') {
+                //     window.location.href = "user.html"
+                // } else {
+                //     alert(login.msg)
+                // }
+
+            }
+
+        });
+        //
+    })
+</script>
 
 </html>

@@ -86,7 +86,10 @@
                 login = JSON.parse(response)
 
                 //set cookies
-                setCookie('id', login.uniq_id, 30)
+                if (login.uniq_id) {
+
+                    setCookie('id', login.uniq_id, 30)
+                }
 
                 // console.log(document.cookie)
                 login = JSON.parse(response)
