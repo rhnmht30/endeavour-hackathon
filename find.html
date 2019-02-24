@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Find page</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/main.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="card-deck" id="fill">
+
+
+
+</body>
+<script>
+    var id = getCookie('id')
+    $.ajax({
+        type: "GET",
+        url: 'http://10.21.75.221:8000/login/getpooldetails/',
+        dataType: 'json',
+
+        success: function (data) {
+            // var counter = 0;
+            console.log(data)
+            data.forEach(function (obj) {
+                console.log(obj)
+                var start = obj['pooling']['time_start'];
+                var end = obj['pooling']['time_end'];
+                var lat = obj['pooling']['latitude'];
+                var long = obj['pooling']['longitude'];
+                var carnumber = obj['cardetails']['carNumber'];
+                var poolername = obj['userdetails']['name'];
+                var poolerphone = obj['userdetails']['mobile'];
+                var car_id = obj['pooling']['carPooled_id'];
+                var pooler_id = obj['cardetails']['addedBy'];
+
+
+                var div = '<div class="card bg-light"><h6 class="card-title text-center"><span class="btn btn-info btn-sm">from: ' + start + ':00</span><span class="btn btn-info btn-sm">to: ' + end + ':00</span></h6><div class="card-body text-center"><p class="card-text "><h7>Lat: ' + lat + '</h7></p><p class="card-text "><h7>Long: ' + long + '</h7></p><p class="card-text "><h7>Car No.: ' + carnumber + '</h7></p><p class="card-text "><h7>Pooler: ' + poolername + '</h7></p><p class="card-text "><h7>Contact: ' + poolerphone + '</h7></p></div><div class="card-footer text-center"><button class="btn btn-outline-success" id="' + car_id + '" onclick="send_id(this.id,' + id + ',' + pooler_id + ')">Accept</button></div></div>'
+                $('#fill').append(div) //#endregion
+            })
+        }
+
+    });
+
+    function send_id(pcid, id, pid) {
+        // console.log(pid, id)
+        $.ajax({
+            type: "GET",
+            url: 'http://10.21.75.221:8000/login/addUsertoPool/?carPooled_id=' + pcid + '&user_id=' + id,
+            dataType: 'json',
+
+            success: function (response) {
+                // var counter = 0;
+                // console.log(response)
+                if (response.message === 'Successfully Pooled') {
+                    window.location.href = 'user.html'
+                }
+            }
+
+        });
+    }
+</script>
+
+</html>

@@ -1,0 +1,155 @@
+<!Doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Jekyll v3.8.5">
+    <title>Signin Template · Bootstrap</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src="js/main.js"></script>
+
+
+    <!-- Custom styles for this template -->
+    <!-- <link href="style.css" rel="stylesheet"> -->
+</head>
+
+<body class="text-center">
+    <form class="form-signin" id="userForm">
+        <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+        <label for="inputEmail" class="sr-only">Username</label>
+        <input type="text" name="username" id="inputEmail" class="form-control" placeholder="Username" required autofocus>
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" name="password" id="inputPassword" class="form-control" placeholder="Password" required>
+
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+        <span>New here? <a href="signup.html">Register Here</a></span>
+        <p class="mt-5 mb-3 text-muted">&copy; 2017-2019</p>
+    </form>
+    <!-- <button onclick="deleteCookie()">Delete Cookie</button> -->
+</body>
+<script>
+    $("#userForm").submit(function (event) {
+        // Stop form from submitting normally
+        event.preventDefault();
+        // console.log("HI");
+        // Get some values from elements on the page:
+        var $form = $(this),
+            username = $form.find("input[name='username']").val(),
+            password = $form.find("input[name='password']").val()
+
+        console.log(username, password)
+        var data = '{"username": "' + username + '","password":"' + password + '"}';
+        console.log(data)
+        // console.log(typeof (username), password, data)
+        postURL = 'http://10.21.75.221:8000/login/login/';
+        // Send the data using post
+
+        // posting = $.post(postURL, data);
+        //GET REQUEST
+        // $.ajax({
+        //     type: "GET",
+        //     url: postURL,
+        //     dataType: "json",
+        //     // responseType: "json",
+        //     // data: data,
+        //     // headers: {
+        //     //     "Access-Control-Allow-Origin": "*"
+        //     // },
+        //     success: function (response) {
+        //         //if request if made successfully then the response represent the data
+        //         alert('success')
+        //         console.log(response)
+
+        //     }
+        // });
+        console.log(data)
+        //POST
+        $.ajax({
+            type: "POST",
+            url: postURL,
+            dataType: "text",
+            // responseType: "json",
+            data: data,
+            // headers: {
+            //     "Access-Control-Allow-Origin": "*"
+            // },
+            success: function (response) {
+                //if request if made successfully then the response represent the data
+                // alert('success')
+                login = JSON.parse(response)
+
+                //set cookies
+                if (login.uniq_id) {
+
+                    setCookie('id', login.uniq_id, 30)
+                }
+
+                // console.log(document.cookie)
+                login = JSON.parse(response)
+                // console.log(login.msg)
+                if (login.message === 'Success') {
+                    window.location.href = "user.html"
+                } else {
+                    alert(login.uniq_id)
+                }
+
+            }
+        });
+
+        // var settings = {
+        //     "async": true,
+        //     "crossDomain": true,
+        //     "url": "http://10.21.75.221:8000/login/login/",
+        //     "method": "POST",
+        //     "headers": {
+        //         "cache-control": "no-cache",
+        //         "Postman-Token": "eaac928a-1dd5-4c61-abb0-f641323e0383",
+        //         "Access-Control-Allow-Origin": "*"
+        //     },
+        //     "data": "{\"username\": \"ds1\",\n\"password\": \"KIET123\"}"
+        // }
+
+        // $.ajax(settings).done(function (response) {
+        //     console.log(response);
+        // });
+        // console.log(data)
+
+
+        //XHR method
+        // var xhr = new XMLHttpRequest();
+        // xhr.open("GET", postURL, true);
+        // xhr.setRequestHeader('Content-Type', 'application/json');
+        // xhr.send()
+        // console.log(xhr)
+
+    });
+
+
+    //Ajax Function to send a get request
+    // $.ajax({
+    //     type: "GET",
+    //     url: url,
+    //     dataType: "json",
+    //     headers: {
+    //         "Access-Control-Allow-Origin": "*"
+    //     },
+    //     success: function (response) {
+    //         //if request if made successfully then the response represent the data
+    //         response.forEach((e) => {
+    //             console.log(e);
+    //
+    //             $("#result").append('<h4>' + e.name + '</h4>');
+
+    //         })
+    //     }
+    // });
+</script>
+
+</html>
