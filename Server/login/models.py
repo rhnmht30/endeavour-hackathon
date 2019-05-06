@@ -20,12 +20,14 @@ class CarDetails(models.Model):
 class startPooling(models.Model):
     startPoolingId = models.AutoField(primary_key=True)
     carPooled = models.ForeignKey(CarDetails,null=True,on_delete=models.SET_NULL)
+    pooledbyid= models.ForeignKey(MyUser,null=True,on_delete=models.SET_NULL)
     time_start = models.CharField(max_length=20,null=True)
     time_end = models.CharField(max_length=20, null=True)
     latitude = models.CharField(max_length=20,null=True)
     longitude = models.CharField(max_length=20,null=True)
     status = models.CharField(max_length=100,null=True)
     seats = models.IntegerField(null=True)
+    
 
 # class AllPoolers(models.Model):
 #     poolid = models.AutoField(primary_key=True)

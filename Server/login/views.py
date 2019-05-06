@@ -68,17 +68,44 @@ def addCar(request):
 def addPool(request):
     if request.method == 'POST':
         data = json.loads(request.body.decode("utf-8"))
-        carnumber = list(CarDetails.objects.filter(carNumber=data['carNumber']).values('cardetailsId'))
-        if carnumber:
-            print(carnumber[0].get('cardetailsId'))
-            myCar = CarDetails.objects.get(cardetailsId=carnumber[0].get('cardetailsId'))
-            # seat = list(CarDetails.objects.filter(carNumber=data['carNumber']).values('carseats'))
-            # print(seat)
-            if myCar:
-                query = startPooling.objects.create(time_start=data['time_start'],time_end = data['time_end'],latitude=data['latitude'],longitude=data['longitude'],status='ACTIVE',carPooled=myCar,seats=data['carseats'])
-                query2 = list(startPooling.objects.filter(carPooled=myCar).values('latitude','longitude'))
-                print(query2)
-                return JsonResponse({'message': 'Success'}, safe=False, status=201)
+        check_for_pooled = list(userPooling.objects.filter(userPooled=data['uniq_id'],status='ACTIVE'))
+        if check_for_pooled:
+            return JsonResponse({'message': 'User is already pooled'}, safe=False, status=201)
+        else:
+            check_for_car_user=list(CarDetails.objects.filter(carNumber=data['carNumber']).values('addedBy','cardetailsId'))
+            if check_for_car_user[0].get('addedBy')==data['uniq_id']:
+                print("chwbdsns,da,sn")
+                check_for_one_pooling_before = list(startPooling.objects.filter(carPooled=check_for_car_user[0].get('cardetailsId'),pooledbyid=data['uniq_id'],status='INACTIVE'))
+                if check_for_one_pooling_before:
+                    print("chwbdsns,da,sn")
+                    startPooling.objects.filter(carPooled=check_for_car_user[0].get('cardetailsId'),pooledbyid=data['uniq_id'],status='INACTIVE').update(status='ACTIVE')
+                    return JsonResponse({'message': 'Successssfuly updated'}, safe=False, status=201)
+                else:
+                    user_pooling = MyUser.objects.get(uniq_id=data['uniq_id'])
+                    myCar = CarDetails.objects.get(carNumber=data['carNumber'])
+                    query=startPooling.objects.create(time_start=data['time_start'],time_end = data['time_end'],latitude=data['latitude'],longitude=data['longitude'],status='ACTIVE',carPooled=myCar,seats=data['carseats'],pooledbyid=user_pooling)
+                    return JsonResponse({'message': 'Successssfully added'}, safe=False, status=201)
+            else:
+                return JsonResponse({'message': 'Car doesnot exist for given user'}, safe=False, status=201)
+
+
+        # try:
+        #     check_for_pooled = list(userPooling.objects.filter(userPooled=data['uniq_id'],status='ACTIVE'))
+        #     if check_for_pooled:
+        #         return JsonResponse({'message': 'User is already pooled'}, safe=False, status=201)
+        #     else:
+        #         carnumber = list(CarDetails.objects.filter(carNumber=data['carNumber']).values('cardetailsId'))
+        #         print(carnumber[0].get('cardetailsId'))
+        #         myCar = CarDetails.objects.get(cardetailsId=carnumber[0].get('cardetailsId'))
+        #         if myCar:
+        #             user_pooling = MyUser.objects.get(uniq_id=data['uniq_id'])
+        #             query = startPooling.objects.create(time_start=data['time_start'],time_end = data['time_end'],latitude=data['latitude'],longitude=data['longitude'],status='ACTIVE',carPooled=myCar,seats=data['carseats'],pooledbyid=user_pooling)
+        #             return JsonResponse({'message': 'Success'}, safe=False, status=201)
+        #         else:
+        #             return JsonResponse({'message': 'Car doesnot exist'}, safe=False, status=201)        
+        # except:
+        #     return JsonResponse({'message': 'Some error occures'}, safe=False, status=401)
+            
 
 def profile(request):
     data_values = {}
