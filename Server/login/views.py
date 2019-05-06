@@ -68,10 +68,10 @@ def addCar(request):
 def addPool(request):
     if request.method == 'POST':
         data = json.loads(request.body.decode("utf-8"))
-        carnumber = CarDetails.objects.filter(carNumber=data['carNumber']).values('cardetailsId')
+        carnumber = list(CarDetails.objects.filter(carNumber=data['carNumber']).values('cardetailsId'))
         if carnumber:
-            print(carnumber.get('cardetailsId'))
-            myCar = CarDetails.objects.get(cardetailsId=carnumber.get('cardetailsId'))
+            print(carnumber[0].get('cardetailsId'))
+            myCar = CarDetails.objects.get(cardetailsId=carnumber[0].get('cardetailsId'))
             # seat = list(CarDetails.objects.filter(carNumber=data['carNumber']).values('carseats'))
             # print(seat)
             if myCar:
@@ -127,7 +127,8 @@ def addUsertoPool(request):
             if query_car_id:
                 query_search_seats = list(startPooling.objects.filter(carPooled=query_car_id[0].get('cardetailsId')).values('seats','startPoolingId'))
                 print(query_search_seats[0].get('seats'))
-                if query_search_seats[0].get('seats')>0:
+                currentseat = query_search_seats[0].get('seats')
+                if query_search_seats[0].get('seats')>1:
                     try:
                         search_already_pooled_once = userPooling.objects.filter(userPooled = data['uniq_id'] ).values('status')
                         if search_already_pooled_once[0].get('status') == 'ACTIVE':
@@ -136,10 +137,12 @@ def addUsertoPool(request):
                             poolingwith = startPooling.objects.get(carPooled=query_car_id[0].get('cardetailsId'))
                             print("checkkkkk")
                             userPooling.objects.filter(userPooled=data['uniq_id']).update(status = 'ACTIVE',poolingwithid=poolingwith)
+                            startPooling.objects.filter(carPooled=query_car_id[0].get('cardetailsId')).update(seats=currentseat-1)
                             return  JsonResponse({'message': 'User Successfully Updated'}, safe=False, status=200)
                     except:
                         add = MyUser.objects.get(uniq_id=uniq)
                         poolingwith = startPooling.objects.get(carPooled=query_car_id[0].get('cardetailsId'))
+                        startPooling.objects.filter(carPooled=query_car_id[0].get('cardetailsId')).update(seats=currentseat-1)
                         userPooling.objects.create(status='ACTIVE',userPooled=add,poolingwithid = poolingwith)
                         return  JsonResponse({'message': 'User Successfully Pooled'}, safe=False, status=200)
                     
