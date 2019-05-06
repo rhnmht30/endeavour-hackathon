@@ -87,24 +87,6 @@ def addPool(request):
                     return JsonResponse({'message': 'Successssfully added'}, safe=False, status=201)
             else:
                 return JsonResponse({'message': 'Car doesnot exist for given user'}, safe=False, status=201)
-
-
-        # try:
-        #     check_for_pooled = list(userPooling.objects.filter(userPooled=data['uniq_id'],status='ACTIVE'))
-        #     if check_for_pooled:
-        #         return JsonResponse({'message': 'User is already pooled'}, safe=False, status=201)
-        #     else:
-        #         carnumber = list(CarDetails.objects.filter(carNumber=data['carNumber']).values('cardetailsId'))
-        #         print(carnumber[0].get('cardetailsId'))
-        #         myCar = CarDetails.objects.get(cardetailsId=carnumber[0].get('cardetailsId'))
-        #         if myCar:
-        #             user_pooling = MyUser.objects.get(uniq_id=data['uniq_id'])
-        #             query = startPooling.objects.create(time_start=data['time_start'],time_end = data['time_end'],latitude=data['latitude'],longitude=data['longitude'],status='ACTIVE',carPooled=myCar,seats=data['carseats'],pooledbyid=user_pooling)
-        #             return JsonResponse({'message': 'Success'}, safe=False, status=201)
-        #         else:
-        #             return JsonResponse({'message': 'Car doesnot exist'}, safe=False, status=201)        
-        # except:
-        #     return JsonResponse({'message': 'Some error occures'}, safe=False, status=401)
             
 
 def profile(request):
@@ -121,26 +103,44 @@ def profile(request):
             cars.append({'car':q})
         return JsonResponse(data=cars, safe=False, status=201)
 
-def getPoolDetails(request):
+def getAllDetails(request):
     data_values = {}
-    pools = []
-    if request.method=='GET':
-        query = list(startPooling.objects.filter(status="ACTIVE").values('time_start','time_end','latitude','longitude','carPooled_id'))
-        # print(query)
-        for q in query:
-            car=q.get('carPooled_id')
-            cardeatils = list(CarDetails.objects.filter(cardetailsId=car).values('carname','carseats','carNumber','addedBy'))
-            # pools.append({'pooling': q,'cardetails':list(cardeatils)})
-            for m in cardeatils:
-                userdetails = list(MyUser.objects.filter(uniq_id=cardeatils[0].get('addedBy')).values('name','mobile','email'))
-                for x in userdetails:
-                    pools.append({'pooling': q, 'cardetails': m,'poolerdetails':x})
-                    print(pools)
-            # print(q.get('carPooled_id'))
-            # print(carpooled)
-        return JsonResponse(data=pools,safe=False,status=200)
-    else:
-        return JsonResponse({'message': 'errro'}, safe=False, status=500)
+    details = []
+    pooler_details = []
+    pooled_details=[]
+    if request.method == 'GET':
+        query_check_user = MyUser.objects.get(uniq_id = request.GET['uniq_id'])
+        if query_check_user:
+            user_own_details = list(MyUser.objects.filter(uniq_id = request.GET['uniq_id']).values('name','username','mobile','email','uniq_id'))
+            for a in user_own_details:
+                details.append({'profile':a})
+            check_pooling_details = list(startPooling.objects.filter(pooledbyid=request.GET['uniq_id'],status='ACTIVE').values('latitude','time_start','time_end','seats','longitude','carPooled'))
+            if check_pooling_details:
+                for a in check_pooling_details:
+                    # pooler_details.append({'trip_details':a})
+                    car_details = list(CarDetails.objects.filter(cardetailsId=a.get('carPooled'),addedBy=request.GET['uniq_id']).values('carNumber','carseats','carname'))
+                    print(a.get('carPooled'))
+                    if car_details:
+                        for m in car_details:
+                            a['car_details']=m
+                            # pooler_details.append({'trip_details':a})
+                            details.append({'my_pooling_details':a})
+            else:
+                details.append({'my_pooling_details':pooler_details})
+            check_isPooling_details = list(userPooling.objects.filter(userPooled=request.GET['uniq_id'],status='ACTIVE').values('poolingwithid'))
+            if check_isPooling_details:
+                get_pooling_details = list(startPooling.objects.filter(startPoolingId = check_isPooling_details[0].get('poolingwithid')).values('latitude','longitude','time_start','time_end','seats','pooledbyid'))
+                if get_pooling_details:
+                    for b in get_pooling_details:
+                        get_pooler_details = list(MyUser.objects.filter(uniq_id=get_pooling_details[0].get('pooledbyid')).values('name','mobile','email'))
+                        for a in get_pooler_details:
+                            b['pooler']=a
+                            details.append({'my_trip_details':b})
+            else:
+                details.append({'my_trip_details':pooled_details})
+
+            return JsonResponse(data=details,safe=False,status=200)
+
 
 def addUsertoPool(request):
     if request.method=='POST':
@@ -198,10 +198,14 @@ def getcurrentPools(request):
         #     data_values = {'status': 'INACTIVE'}
         #     return JsonResponse(data=data_values, safe=False, status=200)
 
-def endpool(request):
+def endmypool(request):
     if request.method=='GET':
-        query = userPooling.objects.filter(userPooled=request.GET['user_id']).update(status = 'INACTIVE')
-        if query:
-            return JsonResponse({'message': 'Successfully Endpool'}, safe=False, status=200)
+        check_for_active = list(userPooling.objects.filter(userPooled=request.GET['uniq_id'],status='ACTIVE'))
+        if check_for_active:
+            query = userPooling.objects.filter(userPooled=request.GET['uniq_id']).update(status = 'INACTIVE')
+            if query:
+                return JsonResponse({'message': 'Successfully Endpool'}, safe=False, status=200)
+            else:
+                return JsonResponse({'message': ' Some error occured'}, safe=False, status=401)
         else:
-            return JsonResponse({'message': ' Some error occured'}, safe=False, status=401)
+            return JsonResponse({'message':'User is already inactive'},safe=False,status=400)
